@@ -8,6 +8,16 @@ pub enum Gender {
     Female,
 }
 
+impl From<usize> for Gender {
+    fn from(value: usize) -> Self {
+        if value == 0 {
+            Gender::Male
+        } else {
+            Gender::Female
+        }
+    }
+}
+
 pub struct NameFactory;
 
 impl NameFactory {
@@ -18,22 +28,17 @@ impl NameFactory {
                 Gender::Female => NameFactory::female_name(),
             }
         } else {
-            match rand::random::<u32>() % 2 {
-                0 => NameFactory::male_name(),
-                1 => NameFactory::female_name(),
-                _ => unimplemented!()
+            match NameFactory::random_gender() {
+                Gender::Male => NameFactory::male_name(),
+                Gender::Female => NameFactory::female_name(),
             }
         }
-    }
-
-    pub fn suffix() -> String {
-        SUFFIXES[NameFactory::random_index(SUFFIXES.len())].to_string()
     }
 
     fn female_name() -> String {
         let name_format = FEMALE_NAME_FORMATS[NameFactory::random_index(FEMALE_NAME_FORMATS.len())];
 
-        let name_segments = name_format.split(" ").count();
+        let name_segments = name_format.split(' ').count();
 
         match name_segments {
             2 => format!("{} {}", NameFactory::female_first_name(), NameFactory::last_name()),
@@ -46,7 +51,7 @@ impl NameFactory {
     fn male_name() -> String {
         let name_format = MALE_NAME_FORMATS[NameFactory::random_index(MALE_NAME_FORMATS.len())];
 
-        let name_segments = name_format.split(" ").count();
+        let name_segments = name_format.split(' ').count();
 
         match name_segments {
             2 => format!("{} {}", NameFactory::male_first_name(), NameFactory::last_name()),
@@ -76,7 +81,15 @@ impl NameFactory {
         LAST_NAME[NameFactory::random_index(LAST_NAME.len())]
     }
 
+    fn suffix() -> &'static str {
+        SUFFIXES[NameFactory::random_index(SUFFIXES.len())]
+    }
+
     fn random_index(bound: usize) -> usize {
         rand::thread_rng().gen_range(0, bound)
+    }
+
+    fn random_gender() -> Gender {
+        Gender::from(rand::thread_rng().gen_range(0, 2))
     }
 }
