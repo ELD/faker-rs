@@ -8,6 +8,6 @@ fn main() {
         .unwrap_or(10);
 
     for _ in 0..num_names {
-        println!("{}", Faker::name(None));
+        println!("{}", Faker::name().name(None));
     }
 }

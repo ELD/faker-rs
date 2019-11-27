@@ -14,8 +14,12 @@ impl Default for Faker {
 }
 
 impl Faker {
-    pub fn name(gender: Option<factories::Gender>) -> String {
+    pub fn name() -> factories::NameFactory {
         // Future? factories::NameFactory::locale(LOCALE)::name(GENDER)
-        factories::NameFactory::name(gender)
+        factories::NameFactory
+    }
+
+    pub fn lorem() -> factories::LoremFactory {
+        factories::LoremFactory
     }
 }
